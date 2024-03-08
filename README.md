@@ -10,17 +10,18 @@
 
 ```
 program ::= <section_code> <section_data> | <section_data> <section_code> | <section_code>
-<section_data> ::= "section .data:" <variables>
-<section_code> ::= "section .code:" <instructions>
-<variables> ::= (<variable> | (<int> | <string>))
-<instructions> ::= (<label> | <instruction>)
+<section_data> ::= "section .data:" <data>
+<section_code> ::= "section .code:" <code>
+<data> ::= (<comment> | <variable>) <data>
+<comment> ::= "#" <text>
+<code> ::= (<comment> | <label> | <instruction>) <code>
 <name> ::= [a-zA-Z]+
 <label> ::= "."<name> ":"
-<variable> ::= <name> ":"
-<reg=> ::= "r1" | "r2" | "r3" | "r4" | "r5" | "r6" | "r7" | "r8 | "r9" | "r10" | "r11" | "r12" | "r14" | "r15""
-<string> ::= '"' <character>, { <character> | <underscore> | " " } '"'
-<char> ::= "'" ( <character> | "\0" | "\n" ) "'"
-<int> ::= <digit>, { <digit> }
+<variable> ::= <name> ":" (<int> | <string>)
+<reg=> ::= "x1" | "x2" | "x3" | "x4" | "x5" | "x6" | "x7" | "x8 | "x9" | "x10" | "x11" | "x12" | "x14" | "x15""
+<string> ::= '"' <character>* '"'
+<character> ::= any printable ASCII character
+<int> ::= <digit>+
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <bin_ops> ::= ("cmp" | "ld" | "st" | "mov" | "add" | "mod" | "div") " " ((<reg> ", " <reg>) | (<reg> ", " "(" <name> ")") | ("(" <name> ")" ", " <reg>))
 <un_ops> ::= ("inc" | "dec" | "neg") " "  (<reg>)
@@ -32,6 +33,7 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 ### Описание
 
 - Поддержка строковых и числовых литералов
+- Поддержка комментариев и меток
 - Переменные объявляются в секции `.data`, инструкции в секции `.code`
 - Точка входа объявляется меткой `.start`
 
@@ -57,9 +59,106 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 
 ### Пример программы выводящий `Hello world!`
 
+```yaasm
+section .data
+# It is definitly Hello World!
+    hello_str: "hello, world!"
+section .code
+.start:
+    mov x4, 0
+    mov x5, hello_str
+.reload:
+    ld x6, [x5]
+    cmp x4, x6
+    je .exit
+    out 1, x6
+    inc x5
+    jmp .reload
+.exit:
+    hlt
+```
 
 Компилируется в `JSON` следующего формата:
 
+```json
+{
+    "data_mem": {
+        "0": 104,
+        "1": 101,
+        "2": 108,
+        "3": 108,
+        "4": 111,
+        "5": 32,
+        "6": 119,
+        "7": 111,
+        "8": 114,
+        "9": 108,
+        "10": 100,
+        "11": 33,
+        "12": 0
+    },
+    "start": 0,
+    "code_mem": {
+        "0": {
+            "opcode": "mov",
+            "args": [
+                "x4",
+                "0"
+            ]
+        },
+        "1": {
+            "opcode": "mov",
+            "args": [
+                "x5",
+                "0"
+            ]
+        },
+        "2": {
+            "opcode": "ld",
+            "args": [
+                "x6",
+                "x5"
+            ]
+        },
+        "3": {
+            "opcode": "cmp",
+            "args": [
+                "x4",
+                "x6"
+            ]
+        },
+        "4": {
+            "opcode": "je",
+            "args": [
+                "8"
+            ]
+        },
+        "5": {
+            "opcode": "out",
+            "args": [
+                "1",
+                "x6"
+            ]
+        },
+        "6": {
+            "opcode": "inc",
+            "args": [
+                "x5"
+            ]
+        },
+        "7": {
+            "opcode": "jmp",
+            "args": [
+                "2"
+            ]
+        },
+        "8": {
+            "opcode": "hlt",
+            "args": []
+        }
+    }
+}
+```
 
 - data_mem - память данных
 - code_mem - память инструкций
@@ -76,7 +175,7 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 Массив 32-х битных слов, реализуется используя `list[int]`.
 При старте симуляции инициализируется нулевыми значениями.
 
-- Строковые литералы выделяются статически при компиляции в pascal-style.
+- Строковые литералы выделяются статически при компиляции в Pascal String.
 
 ### Память команд
 
@@ -85,22 +184,26 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 
 ### Регистры
 
-`x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x14 x15` - общего назначения. При инициализации `x2` устанавливается в конец
-памяти данных, что позволяет программисту работать с ним как со стеком используя `inc` и `dec`.
+`x0` - hardwared zero
+`x1` - reserved
+`x2` - stack pointer
+`x3` - global pointer
+`x4 - x15` - регистры общего назначения
 
 ## Транслятор
 
 - Формат запуска: `./translator.py hello_user.yaasm hello_user.json`
   Реализован в [translator.py](translator.py).
-- Проходом по секции `.data` преобразовывает её в словарь `переменная -> адрес в памяти данных`.
-- Первым проходом по секции `.code` получает словарь `метка -> адрес в памяти команд`.
-- Вторым проходом по секции `.code` резолвит все переменные и метки используя словари полученные на этапах выше.
+  Компиляция осуществляется в 4 прохода по тексту программы: 
+- Проход препроцессора: удаление пустых строк и комментариев
+- Проход по секции `.data`: преобразовывает данные в словарь `переменная -> адрес в памяти данных`.
+- Первый проход по секции `.code`: получает словарь `метка -> адрес в памяти команд`.
+- Второй проход по секции `.code`: подставляет все переменные и метки используя словари полученные на этапах выше.
 
 ## Модель процессора
 
-- Формат запуска: ` ./machine.py hello_user.json ./my_name`. Имя файла с входными данными можно опустить если в них нет
-  нужды.
-  Реализована в [machine.py](machine.py)
+- Формат запуска: ` ./vm.py hello_user.json ./my_name`
+  Реализована в [vm.py](vm.py)
 
 ### Схема
 

@@ -6,7 +6,7 @@ import os
 import tempfile
 
 import pytest
-from machine import computer
+from vm import computer
 from translator import perform_translator
 
 
@@ -15,7 +15,7 @@ def test_bar(golden, caplog):
     caplog.set_level(logging.DEBUG)
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        source_file = os.path.join(tmpdir, "source.vasm")
+        source_file = os.path.join(tmpdir, "source.yaasm")
         target_file = os.path.join(tmpdir, "source.json")
         input_token = [ord(i) for i in golden["stdin"]]
         input_token.append(0)

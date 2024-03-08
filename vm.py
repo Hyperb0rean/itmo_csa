@@ -8,7 +8,7 @@ import sys
 from ctypes import c_int32
 
 from isa import Instruction, Opcode
-from util import INT_MAX, INT_MIN, IP, SP, Register
+from util import INT_MAX, INT_MIN, IP, SP,ZERO, Register
 
 OPCODES_IMPLS = {
     Opcode.ADD: lambda a, b: a + b,
@@ -92,7 +92,7 @@ class DataPath:
         self.regs[SP] = MEM_SIZE - 1
 
     def latch_reg(self, reg: Register, value: int):
-        if reg == Register.R0:
+        if reg == ZERO:
             raise ValueError("Cannot latch register X0")
         self.regs[reg] = value
 
@@ -102,7 +102,7 @@ class DataPath:
         self.active_port = port
 
     def read_port(self, reg: Register):
-        if reg == Register.R0:
+        if reg == ZERO:
             raise ValueError("Cannot write to register X0")
         io = self.ports[self.active_port]
         self.regs[reg] = io.read_byte()
@@ -112,7 +112,7 @@ class DataPath:
         io.write_byte(self.regs[reg])
 
     def get_r0(self):
-        return self.load_reg(Register.R0)
+        return self.load_reg(ZERO)
 
     def load_reg(self, reg: Register) -> int:
         return self.regs[reg]

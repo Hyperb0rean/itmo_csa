@@ -28,9 +28,8 @@ class Register(str, Enum):
     def __str__(self):
         return self.name
 
-
+ZERO = Register.X0
 SP = Register.X2
-DR = Register.X14
 IP = Register.X3
 
 

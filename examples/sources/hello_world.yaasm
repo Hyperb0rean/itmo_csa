@@ -1,0 +1,16 @@
+section .data
+# It is definitly Hello World!
+    hello_str: "hello, world!"
+section .code
+.start:
+    mov x4, 0
+    mov x5, hello_str
+.reload:
+    ld x6, [x5]
+    cmp x4, x6
+    je .exit
+    out 1, x6
+    inc x5
+    jmp .reload
+.exit:
+    hlt
