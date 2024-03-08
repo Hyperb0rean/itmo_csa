@@ -1,4 +1,4 @@
-# Лабораторная работа № 3
+# Lab work № 3
 
 - Сосновцев Григорий Алексеевич P33102
 - `alg -> asm | cisc -> risc | harv | mc -> hw | tick -> instr | struct | stream | mem | pstr | prob1 | 8bit`
@@ -6,7 +6,7 @@
 
 ##  YAASM - Yet Another ASM
 
-### Синтаксис
+### BNF
 
 ```
 program ::= <section_code> <section_data> | <section_data> <section_code> | <section_code>
@@ -30,14 +30,14 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 <instruction> ::= <bin_ops> | <un_ops> | <branch> | <zero_arg>
 ```
 
-### Описание
+### Description
 
 - Поддержка строковых и числовых литералов
 - Поддержка комментариев и меток
 - Переменные объявляются в секции `.data`, инструкции в секции `.code`
 - Точка входа объявляется меткой `.start`
 
-### Набор инструкции
+### Instruction set
 
 | Инструкция    | Такты |
 |---------------|-------|
@@ -57,7 +57,7 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 | in reg, port  | 4     |
 | out port, reg | 4     |
 
-### Пример программы выводящий `Hello world!`
+### `Hello world!` example
 
 ```yaasm
 section .data
@@ -164,35 +164,35 @@ section .code
 - code_mem - память инструкций
 - start - точка входа в памяти инструкций
 
-## Организация памяти:
+## Memory
 
 Гарвардская архитектура, память данных и память команд разделена.
 Данные и инструкции располагаются в начале соответствующих себе адресных пространств.
 При инициализации процессора `x2` устанавливается на последний адрес памяти данных.
 
-### Память данных
+### Data
 
 Массив 32-х битных слов, реализуется используя `list[int]`.
 При старте симуляции инициализируется нулевыми значениями.
 
 - Строковые литералы выделяются статически при компиляции в Pascal String.
 
-### Память команд
+### Code
 
 Реализуется с использованием `list[Instruction]`.
 При старте симуляции инициализируется `nop` инструкциями.
 
-### Регистры
+### Registers
 
-`x0` - hardwared zero
-`x1` - reserved
-`x2` - stack pointer
-`x3` - global pointer
-`x4 - x15` - регистры общего назначения
+- `x0` - hardwared zero
+- `x1` - reserved
+- `x2` - stack pointer
+- `x3` - global pointer
+- `x4 - x15` - регистры общего назначения
 
-## Транслятор
+## Translator
 
-- Формат запуска: `./translator.py hello_user.yaasm hello_user.json`
+- Формат запуска: `./translator.py hello_world.yaasm hello_user.json`
   Реализован в [translator.py](translator.py).
   Компиляция осуществляется в 4 прохода по тексту программы: 
 - Проход препроцессора: удаление пустых строк и комментариев
@@ -200,12 +200,12 @@ section .code
 - Первый проход по секции `.code`: получает словарь `метка -> адрес в памяти команд`.
 - Второй проход по секции `.code`: подставляет все переменные и метки используя словари полученные на этапах выше.
 
-## Модель процессора
+## Virtual machine
 
-- Формат запуска: ` ./vm.py hello_user.json ./my_name`
+- Формат запуска: ` ./vm.py hello_world.json ./my_name`
   Реализована в [vm.py](vm.py)
 
-### Схема
+### Scheme
 
 ![scheme.jpg](doc%2Fscheme.jpg)
 
@@ -220,7 +220,7 @@ section .code
 - read data - чтение памяти данных
 - read instruction - чтение памяти инструкций
 
-## Тестирование
+## Tests
 
 Тестирование производится набором **golden** тестов, реализация в директории: [tests](tests).
 Тестируются следующие алгоритмы:
