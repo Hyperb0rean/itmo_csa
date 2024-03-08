@@ -24,8 +24,8 @@ def transform_data_into_structure(data: str) -> (dict[int, int], dict[str, str])
         assert name not in variables, "Variable already defined."
 
         if value[0] == '"':
-            ascii_values = [ord(char) for char in value[1:-1].replace(r"\n", "\n")]
-            ascii_values.append(0)
+            ascii_values = [len(value) - 2]
+            ascii_values += [ord(char) for char in value[1:-1].replace(r"\n", "\n")]
             variables[name] = address_counter
             for char in ascii_values:
                 data_mem[int(address_counter)] = int(char)

@@ -61,18 +61,21 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 
 ```yaasm
 section .data
-# It is definitly Hello World!
-    hello_str: "hello, world!"
+# It is definitly "Hello, World!"
+    hello_str: "Hello, world!"
 section .code
 .start:
     mov x4, 0
     mov x5, hello_str
-.reload:
     ld x6, [x5]
+    inc x5
+.reload:
     cmp x4, x6
     je .exit
-    out 1, x6
+    ld x7, [x5]
+    out 1, x7
     inc x5
+    dec x6
     jmp .reload
 .exit:
     hlt
@@ -83,19 +86,19 @@ section .code
 ```json
 {
     "data_mem": {
-        "0": 104,
-        "1": 101,
-        "2": 108,
+        "0": 12,
+        "1": 72,
+        "2": 101,
         "3": 108,
-        "4": 111,
-        "5": 32,
-        "6": 119,
-        "7": 111,
-        "8": 114,
-        "9": 108,
-        "10": 100,
-        "11": 33,
-        "12": 0
+        "4": 108,
+        "5": 111,
+        "6": 32,
+        "7": 119,
+        "8": 111,
+        "9": 114,
+        "10": 108,
+        "11": 100,
+        "12": 33
     },
     "start": 0,
     "code_mem": {
@@ -121,38 +124,57 @@ section .code
             ]
         },
         "3": {
+            "opcode": "inc",
+            "args": [
+                "x5"
+            ]
+        },
+        "4": {
             "opcode": "cmp",
             "args": [
                 "x4",
                 "x6"
             ]
         },
-        "4": {
+        "5": {
             "opcode": "je",
             "args": [
-                "8"
-            ]
-        },
-        "5": {
-            "opcode": "out",
-            "args": [
-                "1",
-                "x6"
+                "11"
             ]
         },
         "6": {
+            "opcode": "ld",
+            "args": [
+                "x7",
+                "x5"
+            ]
+        },
+        "7": {
+            "opcode": "out",
+            "args": [
+                "1",
+                "x7"
+            ]
+        },
+        "8": {
             "opcode": "inc",
             "args": [
                 "x5"
             ]
         },
-        "7": {
-            "opcode": "jmp",
+        "9": {
+            "opcode": "dec",
             "args": [
-                "2"
+                "x6"
             ]
         },
-        "8": {
+        "10": {
+            "opcode": "jmp",
+            "args": [
+                "4"
+            ]
+        },
+        "11": {
             "opcode": "hlt",
             "args": []
         }
