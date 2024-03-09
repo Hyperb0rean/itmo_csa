@@ -8,7 +8,7 @@ def remove_extra_spaces(line: str) -> str:
     return re.sub(r"\s+", " ", line)
 
 def remove_comments(line: str) -> str:
-    return line if not line.startswith('#') else ''
+    return line if not line.startswith("#") else ""
 
 def remove_commas(line: str) -> str:
     line = line.replace("','", str(ord(",")))

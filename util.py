@@ -49,9 +49,9 @@ def convert_to_register(arg):
         return Register[arg]
     return arg
 
-    
-def hex(hex: str) -> int:
-    return int(hex,16) - 2**32
+
+def to_hex(hx: str) -> int:
+    return int(hx,16) - 2**32
 
 class InvalidSymbolsError(Exception):
     def __init__(self, got, expected):
