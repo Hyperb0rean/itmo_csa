@@ -53,8 +53,6 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 | jmp label     | 2     |
 | jg label      | 2     |
 | je label      | 2     |
-| in reg, port  | 4     |
-| out port, reg | 4     |
 
 ### `Hello world!` example
 
