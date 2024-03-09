@@ -23,5 +23,4 @@ def preprocessing(asm_text: str) -> str:
     removed_commas = map(remove_commas, remove_empty_lines)
     remove_spaces = map(remove_extra_spaces, removed_commas)
     joined: str = "\n".join(remove_spaces)
-    print(joined)
     return joined
