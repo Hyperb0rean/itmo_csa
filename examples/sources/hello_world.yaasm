@@ -1,19 +1,22 @@
 section .data
 # It is definitly "Hello, World!"
     hello_str: "Hello, world!"
+#   MMIO out address 
+    out: -33
 section .code
 .start:
+    mov x8, out
     mov x4, 0
     mov x5, hello_str
     ld x6, [x5]
     inc x5
-.reload:
+.while:
     cmp x4, x6
     je .exit
     ld x7, [x5]
-    out 1, x7
+    st [x8], x7
     inc x5
     dec x6
-    jmp .reload
+    jmp .while
 .exit:
     hlt

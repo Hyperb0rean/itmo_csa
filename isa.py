@@ -18,8 +18,8 @@ class Opcode(str, Enum):
     JUMP = "jmp"
     JG = "jg"
     JE = "je"
-    IN = "in"
-    OUT = "out"
+    # IN = "in"
+    # OUT = "out"
     NOP = "nop"
 
     def __str__(self):

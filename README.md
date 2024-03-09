@@ -13,16 +13,15 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 <section_data> ::= "section .data:" <data>
 <section_code> ::= "section .code:" <code>
 <data> ::= (<comment> | <variable>) <data>
-<comment> ::= "#" <text>
 <code> ::= (<comment> | <label> | <instruction>) <code>
-<name> ::= [a-zA-Z]+
+<comment> ::= "#" <character>*
 <label> ::= "."<name> ":"
+<name> ::= [a-zA-Z]+
 <variable> ::= <name> ":" (<int> | <string>)
 <reg=> ::= "x1" | "x2" | "x3" | "x4" | "x5" | "x6" | "x7" | "x8 | "x9" | "x10" | "x11" | "x12" | "x14" | "x15""
 <string> ::= '"' <character>* '"'
 <character> ::= any printable ASCII character
-<int> ::= <digit>+
-<digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<int> ::= - <DIGIT>+ | <DIGIT>+
 <bin_ops> ::= ("cmp" | "ld" | "st" | "mov" | "add" | "mod" | "div") " " ((<reg> ", " <reg>) | (<reg> ", " "(" <name> ")") | ("(" <name> ")" ", " <reg>))
 <un_ops> ::= ("inc" | "dec" | "neg") " "  (<reg>)
 <branch> ::= ("jmp" | "je" | "jg") " " (<label>)
@@ -63,20 +62,23 @@ program ::= <section_code> <section_data> | <section_data> <section_code> | <sec
 section .data
 # It is definitly "Hello, World!"
     hello_str: "Hello, world!"
+#   MMIO out address 
+    out: -33
 section .code
 .start:
+    mov x8, out
     mov x4, 0
     mov x5, hello_str
     ld x6, [x5]
     inc x5
-.reload:
+.while:
     cmp x4, x6
     je .exit
     ld x7, [x5]
-    out 1, x7
+    st [x8], x7
     inc x5
     dec x6
-    jmp .reload
+    jmp .while
 .exit:
     hlt
 ```
@@ -98,83 +100,91 @@ section .code
         "9": 114,
         "10": 108,
         "11": 100,
-        "12": 33
+        "12": 33,
+        "13": -33
     },
     "start": 0,
     "code_mem": {
         "0": {
             "opcode": "mov",
             "args": [
+                "x8",
+                "13"
+            ]
+        },
+        "1": {
+            "opcode": "mov",
+            "args": [
                 "x4",
                 "0"
             ]
         },
-        "1": {
+        "2": {
             "opcode": "mov",
             "args": [
                 "x5",
                 "0"
             ]
         },
-        "2": {
+        "3": {
             "opcode": "ld",
             "args": [
                 "x6",
                 "x5"
             ]
         },
-        "3": {
+        "4": {
             "opcode": "inc",
             "args": [
                 "x5"
             ]
         },
-        "4": {
+        "5": {
             "opcode": "cmp",
             "args": [
                 "x4",
                 "x6"
             ]
         },
-        "5": {
+        "6": {
             "opcode": "je",
             "args": [
-                "11"
+                "12"
             ]
         },
-        "6": {
+        "7": {
             "opcode": "ld",
             "args": [
                 "x7",
                 "x5"
             ]
         },
-        "7": {
-            "opcode": "out",
+        "8": {
+            "opcode": "st",
             "args": [
-                "1",
+                "x8",
                 "x7"
             ]
         },
-        "8": {
+        "9": {
             "opcode": "inc",
             "args": [
                 "x5"
             ]
         },
-        "9": {
+        "10": {
             "opcode": "dec",
             "args": [
                 "x6"
             ]
         },
-        "10": {
+        "11": {
             "opcode": "jmp",
             "args": [
-                "4"
+                "5"
             ]
         },
-        "11": {
+        "12": {
             "opcode": "hlt",
             "args": []
         }
@@ -224,7 +234,7 @@ section .code
 
 ## Virtual machine
 
-- Формат запуска: ` ./vm.py hello_world.json ./my_name`
+- Формат запуска: ` ./vm.py hello_world.json ./io`
   Реализована в [vm.py](vm.py)
 
 ### Scheme

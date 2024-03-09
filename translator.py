@@ -87,7 +87,7 @@ def transform_text_into_structure(
                 assert is_register(command_arguments[0]), "mov first argument should be register"
                 if is_register(command_arguments[1]):
                     current_instruction = Instruction(cur_opcode, command_arguments)
-                elif command_arguments[1].isdigit():
+                elif command_arguments[1].isdigit() or (command_arguments[1][0] == '-' and command_arguments[1][1:].isdigit()):
                     current_instruction = Instruction(cur_opcode, command_arguments)
                 elif variables[command_arguments[1]] is not None:
                     current_instruction = Instruction(
@@ -118,18 +118,6 @@ def transform_text_into_structure(
                 assert is_register(command_arguments[0][1:-1]), "Not registers in arguments"
                 assert is_register(command_arguments[1]), "Not registers in arguments"
                 current_instruction = Instruction(cur_opcode, [command_arguments[0][1:-1], command_arguments[1]])
-
-            if cur_opcode == Opcode.IN:
-                assert len(command_arguments) == 2, "in must have 2 arguments"
-                assert is_register(command_arguments[0]), "in arg mismatch"
-                assert command_arguments[1].isdigit(), "in arg mismatch"
-                current_instruction = Instruction(cur_opcode, [command_arguments[0], command_arguments[1]])
-
-            if cur_opcode == Opcode.OUT:
-                assert len(command_arguments) == 2, "out must have 2 arguments"
-                assert is_register(command_arguments[1]), "out arg mismatch"
-                assert command_arguments[0].isdigit(), "out arg mismatch"
-                current_instruction = Instruction(cur_opcode, [command_arguments[0], command_arguments[1]])
 
             assert current_instruction is not None, "Instruction parsing error"
             command_mem[address_counter] = current_instruction

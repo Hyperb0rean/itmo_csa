@@ -75,12 +75,11 @@ MEM_SIZE = 2**10
 class DataPath:
     alu: ALU = ALU()
 
-    def __init__(self, start: int, code: dict[int, Instruction], data: dict[int, int], ports: [int, IO]):
+    def __init__(self, start: int, code: dict[int, Instruction], data: dict[int, int], mmio: dict[int, IO]):
         self.data_mem: list[int] = [0 for _ in range(MEM_SIZE)]
         self.code_mem: list[Instruction] = [Instruction(Opcode.NOP) for _ in range(MEM_SIZE)]
-        self.ports: dict[int, IO] = ports
-        self.active_port: int = 0
         self.regs: dict[Register, int] = dict()
+        self.mmio = mmio
         for reg in range(0, 15):
             self.regs[Register(f"x{reg}")] = 0
 
@@ -94,24 +93,11 @@ class DataPath:
     def latch_reg(self, reg: Register, value: int):
         if reg == ZERO:
             raise ValueError("Cannot latch register X0")
+        if reg == Register.X1:
+            raise ValueError("Cannot latch register X1")
         self.regs[reg] = value
 
-    def choose_port(self, port: int):
-        if port not in self.ports:
-            raise ValueError(f"No port {port}")
-        self.active_port = port
-
-    def read_port(self, reg: Register):
-        if reg == ZERO:
-            raise ValueError("Cannot write to register X0")
-        io = self.ports[self.active_port]
-        self.regs[reg] = io.read_byte()
-
-    def write_port(self, reg: Register):
-        io = self.ports[self.active_port]
-        io.write_byte(self.regs[reg])
-
-    def get_r0(self):
+    def get_zero(self):
         return self.load_reg(ZERO)
 
     def load_reg(self, reg: Register) -> int:
@@ -182,17 +168,17 @@ class ControlUnit:
 
     def un_arithmetic(self, instr: Instruction):
         res: int = self.dataPath.calc(
-            instr.opcode, self.dataPath.load_reg(Register(instr.args[0])), self.dataPath.get_r0()
+            instr.opcode, self.dataPath.load_reg(Register(instr.args[0])), self.dataPath.get_zero()
         )
         self.dataPath.latch_reg(Register(instr.args[0]), res)
         self.tick()
 
     def mov(self, instr: Instruction):
-        if instr.args[1].isdigit():
+        if instr.args[1].isdigit() or (instr.args[1][0] == '-' and instr.args[1][1:].isdigit()):
             reg_from_data: int = int(instr.args[1])
         else:
             reg_from: Register = Register(instr.args[1])
-            reg_from_data: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[reg_from], self.dataPath.get_r0())
+            reg_from_data: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[reg_from], self.dataPath.get_zero())
         self.tick()
         reg_to: Register = Register(instr.args[0])
         self.dataPath.latch_reg(reg_to, reg_from_data)
@@ -201,38 +187,32 @@ class ControlUnit:
     def ld(self, instr: Instruction):
         reg_to: Register = Register(instr.args[0])
         addr_reg: Register = Register(instr.args[1])
-        addr_to_read: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[addr_reg], self.dataPath.get_r0())
+        addr_to_read: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[addr_reg], self.dataPath.get_zero())
         self.tick()
-        data: int = self.dataPath.data_mem[addr_to_read]
-        self.tick()
-        self.dataPath.latch_reg(reg_to, data)
-        self.tick()
+        if self.dataPath.alu.negative:
+            data: int = self.dataPath.mmio[addr_to_read].read_byte()
+            self.tick()
+            self.dataPath.latch_reg(reg_to, data)
+            self.tick()
+        else:
+            data: int = self.dataPath.data_mem[addr_to_read]
+            self.tick()
+            self.dataPath.latch_reg(reg_to, data)
+            self.tick()
 
     def st(self, instr: Instruction):
         data_reg: Register = Register(instr.args[1])
-        data: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[data_reg], self.dataPath.get_r0())
+        data: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[data_reg], self.dataPath.get_zero())
         self.tick()
         addr_reg: Register = Register(instr.args[0])
-        addr: int = self.dataPath.calc(Opcode.ADD, 0, self.dataPath.regs[addr_reg])
+        addr: int = self.dataPath.calc(Opcode.ADD, self.dataPath.get_zero(), self.dataPath.regs[addr_reg])
         self.tick()
-        self.dataPath.data_mem[addr] = data
+        if self.dataPath.alu.negative:
+            self.dataPath.mmio[addr].write_byte(data)
+        else:
+            self.dataPath.data_mem[addr] = data
         self.tick()
 
-    def out(self, instr: Instruction):
-        self.dataPath.choose_port(int(instr.args[0]))
-        self.tick()
-        reg_from = Register(instr.args[1])
-        self.dataPath.write_port(reg_from)
-        self.tick()
-        pass
-
-    def inb(self, instr: Instruction):
-        self.dataPath.choose_port(int(instr.args[1]))
-        self.tick()
-        reg_to = Register(instr.args[0])
-        self.dataPath.read_port(reg_to)
-        self.tick()
-        pass
 
     def decode_and_execute_instruction(self):
         instr: Instruction = self.instruction_fetch()
@@ -250,10 +230,6 @@ class ControlUnit:
             self.bin_arithmetic(instr)
         elif instr.opcode in [Opcode.INC, Opcode.DEC]:
             self.un_arithmetic(instr)
-        elif instr.opcode == Opcode.OUT:
-            self.out(instr)
-        elif instr.opcode == Opcode.IN:
-            self.inb(instr)
         elif instr.opcode == Opcode.NOP:
             pass
         else:
@@ -275,8 +251,8 @@ class ControlUnit:
 
 
 def simulation(start: int, code: dict[int, Instruction], data: dict[int, int], input_tokens: list[int], limit: int):
-    ports = {0: IO(input_tokens), 1: IO([])}
-    dp = DataPath(start, code, data, ports)
+    mmio = {-1 : IO(input_tokens), -33: IO([])}
+    dp = DataPath(start, code, data, mmio)
     cu = ControlUnit(dp)
 
     logging.debug("%s", cu)
@@ -291,9 +267,9 @@ def simulation(start: int, code: dict[int, Instruction], data: dict[int, int], i
     except StopIteration:
         pass
 
-    for port, io in ports.items():
+    for addr, io in mmio.items():
         if len(io.output) != 0:
-            print(f"Port {port}: '{io.output}'")
+            print(f"MMIO on {addr} : '{io.output}'")
 
 
 def computer(code_dictionary, tokens: list[int]):
