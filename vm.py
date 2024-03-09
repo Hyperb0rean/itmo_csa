@@ -261,7 +261,6 @@ def simulation(start: int, code: dict[int, Instruction], data: dict[int, int], i
     mmio = {hex('0xFFFFFFFF'): IO(input_tokens), hex('0xFFFFFFDF'): IO([])}
     dp = DataPath(start, code, data, mmio)
     cu = ControlUnit(dp)
-    logging.debug("%s", mmio)
     logging.debug("%s", cu)
     instr_counter = 0
     try:
