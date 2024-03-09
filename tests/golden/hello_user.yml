@@ -58,10 +58,10 @@ stdin: |
 stdout: |-
   =====
   MMIO on -33 : '
-  - Say my name 
-
+    - Say my name  
+    
     - Heisenberg
-  - You God damn right '
+    - You God damn right '
 
 out_code_readable: |-
   {
