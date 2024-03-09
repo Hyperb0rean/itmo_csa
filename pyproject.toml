@@ -6,7 +6,7 @@ authors = ["Hyperb0rean <greg.sosnovtsev@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 pydantic = "^2.5.3"
 self = "^2020.12.3"
 

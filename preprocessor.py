@@ -14,7 +14,6 @@ def remove_commas(line: str) -> str:
     line = line.replace("','", str(ord(",")))
     return line.replace(",", " ")
 
-
 def preprocessing(asm_text: str) -> str:
     lines: list[str] = asm_text.splitlines()
     strip_lines = map(str.strip, lines)

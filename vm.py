@@ -181,8 +181,10 @@ class ControlUnit:
         self.tick()
 
     def mov(self, instr: Instruction):
-        if instr.args[1].isdigit() or (instr.args[1][0] == '-' and instr.args[1][1:].isdigit()) or (instr.args[1][0] == '0' and instr.args[1][1] == 'x' ):
-            reg_from_data: int = int(instr.args[1],0)
+        if instr.args[1].isdigit() or (instr.args[1][0] == '-' and instr.args[1][1:].isdigit()):
+            reg_from_data: int = int(instr.args[1])
+        elif (instr.args[1][0] == '0' and instr.args[1][1] == 'x' ):
+            reg_from_data: int = hex(instr.args[1])
         else:
             reg_from: Register = Register(instr.args[1])
             reg_from_data: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[reg_from], self.dataPath.get_zero())

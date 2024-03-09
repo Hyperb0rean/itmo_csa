@@ -90,7 +90,9 @@ def transform_text_into_structure(
                 assert is_register(command_arguments[0]), "mov first argument should be register"
                 if is_register(command_arguments[1]):
                     current_instruction = Instruction(cur_opcode, command_arguments)
-                elif command_arguments[1].isdigit() or (command_arguments[1][0] == '-' and command_arguments[1][1:].isdigit()) or (command_arguments[1][0] == '0' and command_arguments[1][1] == 'x' ):
+                elif command_arguments[1].isdigit() or (command_arguments[1][0] == '-' and command_arguments[1][1:].isdigit()):
+                    current_instruction = Instruction(cur_opcode, command_arguments)
+                elif (command_arguments[1][0] == '0' and command_arguments[1][1] == 'x' ):
                     current_instruction = Instruction(cur_opcode, command_arguments)
                 elif variables[command_arguments[1]] is not None:
                     current_instruction = Instruction(
