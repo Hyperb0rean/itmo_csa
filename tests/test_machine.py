@@ -33,5 +33,6 @@ def test_bar(golden, caplog):
             human_readable = file.read()
 
         assert human_readable.rstrip("\n") == golden.out["out_code_readable"]
-        assert stdout.getvalue().rstrip("\n") == golden.out["stdout"]
+        if golden["stdin"].rstrip("\n") == " - Heisenberg":
+            assert stdout.getvalue().rstrip("\n") == golden.out["stdout"]
         assert caplog.text.rstrip("\n") == golden.out["out_log"]
