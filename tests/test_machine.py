@@ -25,7 +25,7 @@ def test_bar(golden, caplog):
 
         with contextlib.redirect_stdout(io.StringIO()) as stdout:
             perform_translator(golden["source_code"], target_file)
-            print("=" * 25)
+            print("=" * 5)
             code_dict = json.load(open(target_file, encoding="utf-8"))
             computer(code_dict, input_token)
 
