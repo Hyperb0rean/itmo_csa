@@ -17,7 +17,7 @@ def test_bar(golden, caplog):
     with tempfile.TemporaryDirectory() as tmpdir:
         source_file = os.path.join(tmpdir, "source.yaasm")
         target_file = os.path.join(tmpdir, "source.json")
-        input_token = [ord(i) for i in golden["stdin"]]
+        input_token = [ord(i) for i in golden["stdin"].rstrip("\n")]
         input_token.append(0)
 
         with open(source_file, "w", encoding="utf-8") as file:
