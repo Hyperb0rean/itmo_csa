@@ -239,18 +239,17 @@ section .code
 
 ### Scheme
 
-![scheme.jpg](doc%2Fscheme.jpg)
+![scheme_csa.jpg](doc/scheme_csa.png)
 
-- choose port - выбор порта для работы с IO
-- write io - запись в выбранное устройство
-- read io чтение с выбранного устройства
-- choose op - выбор операции на АЛУ
-- latch reg - защелкнуть регистр
-- sel regs - выбор в мультиплексорe
-- sel ip - выбор в мультиплексоре регистра IP
+- write_io - запись в выбранное устройство
+- read_io чтение с выбранного устройства
+- choose_op - выбор операции на АЛУ
+- latch_reg - защелкнуть регистр
+- sel_regs - выбор в мультиплексорe
+- sel_ip - выбор в мультиплексоре регистра IP
 - write data - запись в память данных
-- read data - чтение памяти данных
-- read instruction - чтение памяти инструкций
+- read_data - чтение памяти данных
+- read_instruction - чтение памяти инструкций
 
 ## Tests
 
