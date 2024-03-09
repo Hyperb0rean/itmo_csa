@@ -1,25 +1,25 @@
 source_code: |-
-section .data
-# It is definitly "Hello, World!"
-    hello_str: "Hello, world!"
-section .code
-.start:
-#   MMIO out address 
-    mov x8, 0xFFFFFFDF
-    mov x4, 0
-    mov x5, hello_str
-    ld x6, [x5]
-    inc x5
-.while:
-    cmp x4, x6
-    je .exit
-    ld x7, [x5]
-    st [x8], x7
-    inc x5
-    dec x6
-    jmp .while
-.exit:
-    hlt
+  section .data
+  # It is definitly "Hello, World!"
+      hello_str: "Hello, world!"
+  section .code
+  .start:
+  #   MMIO out address 
+      mov x8, 0xFFFFFFDF
+      mov x4, 0
+      mov x5, hello_str
+      ld x6, [x5]
+      inc x5
+  .while:
+      cmp x4, x6
+      je .exit
+      ld x7, [x5]
+      st [x8], x7
+      inc x5
+      dec x6
+      jmp .while
+  .exit:
+      hlt
 
 stdin: |
 
