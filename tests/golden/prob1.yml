@@ -1,0 +1,423 @@
+source_code: |-
+  section .code
+  .start:
+      mov x4, 0
+      mov x5, 0xFFFFFFDF
+      mov x6, 3
+      mov x7, 5
+      mov x8, 1
+      mov x9, 0
+      mov x10, 10
+  .loop:
+      mov x11, x8
+      mod x11, x6
+      cmp x11, x9
+      je .add
+  .next:
+      mov x11, x8
+      mod x11, x7
+      cmp x11, x9
+      je .add
+  .inc:
+      inc x8
+      cmp x8, x10
+      je .exit
+      jmp .loop
+  .add:
+      add x4, x8
+      jmp .inc
+  .exit:
+      mov x10, 10
+      mov x12, 48
+      dec x2
+  .stack_loop:
+      mov x11, x4
+      mod x11, x10
+      div x4, x10
+      add x11, x12
+      st [x2], x11
+      cmp x4, x9
+      je .print
+      dec x2
+      jmp .stack_loop
+  .print:
+      ld x4, [x2]
+      cmp x4, x9
+      je .hlt
+      st [x5], x4
+      inc x2
+      jmp .print
+  .hlt:
+      hlt
+
+stdin: |
+  Nothing gonna change
+stdout: |-
+  =====
+  MMIO on -33 : '23'
+
+out_code_readable: |-
+  {
+      "data_mem": {},
+      "start": 0,
+      "code_mem": {
+          "0": {
+              "opcode": "mov",
+              "args": [
+                  "x4",
+                  "0"
+              ]
+          },
+          "1": {
+              "opcode": "mov",
+              "args": [
+                  "x5",
+                  "0xFFFFFFDF"
+              ]
+          },
+          "2": {
+              "opcode": "mov",
+              "args": [
+                  "x6",
+                  "3"
+              ]
+          },
+          "3": {
+              "opcode": "mov",
+              "args": [
+                  "x7",
+                  "5"
+              ]
+          },
+          "4": {
+              "opcode": "mov",
+              "args": [
+                  "x8",
+                  "1"
+              ]
+          },
+          "5": {
+              "opcode": "mov",
+              "args": [
+                  "x9",
+                  "0"
+              ]
+          },
+          "6": {
+              "opcode": "mov",
+              "args": [
+                  "x10",
+                  "10"
+              ]
+          },
+          "7": {
+              "opcode": "mov",
+              "args": [
+                  "x11",
+                  "x8"
+              ]
+          },
+          "8": {
+              "opcode": "mod",
+              "args": [
+                  "x11",
+                  "x6"
+              ]
+          },
+          "9": {
+              "opcode": "cmp",
+              "args": [
+                  "x11",
+                  "x9"
+              ]
+          },
+          "10": {
+              "opcode": "je",
+              "args": [
+                  "19"
+              ]
+          },
+          "11": {
+              "opcode": "mov",
+              "args": [
+                  "x11",
+                  "x8"
+              ]
+          },
+          "12": {
+              "opcode": "mod",
+              "args": [
+                  "x11",
+                  "x7"
+              ]
+          },
+          "13": {
+              "opcode": "cmp",
+              "args": [
+                  "x11",
+                  "x9"
+              ]
+          },
+          "14": {
+              "opcode": "je",
+              "args": [
+                  "19"
+              ]
+          },
+          "15": {
+              "opcode": "inc",
+              "args": [
+                  "x8"
+              ]
+          },
+          "16": {
+              "opcode": "cmp",
+              "args": [
+                  "x8",
+                  "x10"
+              ]
+          },
+          "17": {
+              "opcode": "je",
+              "args": [
+                  "21"
+              ]
+          },
+          "18": {
+              "opcode": "jmp",
+              "args": [
+                  "7"
+              ]
+          },
+          "19": {
+              "opcode": "add",
+              "args": [
+                  "x4",
+                  "x8"
+              ]
+          },
+          "20": {
+              "opcode": "jmp",
+              "args": [
+                  "15"
+              ]
+          },
+          "21": {
+              "opcode": "mov",
+              "args": [
+                  "x10",
+                  "10"
+              ]
+          },
+          "22": {
+              "opcode": "mov",
+              "args": [
+                  "x12",
+                  "48"
+              ]
+          },
+          "23": {
+              "opcode": "dec",
+              "args": [
+                  "x2"
+              ]
+          },
+          "24": {
+              "opcode": "mov",
+              "args": [
+                  "x11",
+                  "x4"
+              ]
+          },
+          "25": {
+              "opcode": "mod",
+              "args": [
+                  "x11",
+                  "x10"
+              ]
+          },
+          "26": {
+              "opcode": "div",
+              "args": [
+                  "x4",
+                  "x10"
+              ]
+          },
+          "27": {
+              "opcode": "add",
+              "args": [
+                  "x11",
+                  "x12"
+              ]
+          },
+          "28": {
+              "opcode": "st",
+              "args": [
+                  "x2",
+                  "x11"
+              ]
+          },
+          "29": {
+              "opcode": "cmp",
+              "args": [
+                  "x4",
+                  "x9"
+              ]
+          },
+          "30": {
+              "opcode": "je",
+              "args": [
+                  "33"
+              ]
+          },
+          "31": {
+              "opcode": "dec",
+              "args": [
+                  "x2"
+              ]
+          },
+          "32": {
+              "opcode": "jmp",
+              "args": [
+                  "24"
+              ]
+          },
+          "33": {
+              "opcode": "ld",
+              "args": [
+                  "x4",
+                  "x2"
+              ]
+          },
+          "34": {
+              "opcode": "cmp",
+              "args": [
+                  "x4",
+                  "x9"
+              ]
+          },
+          "35": {
+              "opcode": "je",
+              "args": [
+                  "39"
+              ]
+          },
+          "36": {
+              "opcode": "st",
+              "args": [
+                  "x5",
+                  "x4"
+              ]
+          },
+          "37": {
+              "opcode": "inc",
+              "args": [
+                  "x2"
+              ]
+          },
+          "38": {
+              "opcode": "jmp",
+              "args": [
+                  "33"
+              ]
+          },
+          "39": {
+              "opcode": "hlt",
+              "args": []
+          }
+      }
+  }
+
+out_log: |-
+  DEBUG   vm:simulation    TICK 0 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 0)(X4 = 0)(X5 = 0)(X6 = 0)(X7 = 0)(X8 = 0)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] MOV ['x8', '0xFFFFFFDF']
+  DEBUG   vm:simulation    TICK 4 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 1)(X4 = 0)(X5 = 0)(X6 = 0)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] MOV ['x4', '0']
+  DEBUG   vm:simulation    TICK 8 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 2)(X4 = 0)(X5 = 0)(X6 = 0)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] MOV ['x5', '0']
+  DEBUG   vm:simulation    TICK 12 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 3)(X4 = 0)(X5 = 0)(X6 = 0)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x6', 'x5']
+  DEBUG   vm:simulation    TICK 17 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 4)(X4 = 0)(X5 = 0)(X6 = 12)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 20 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 1)(X6 = 12)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 23 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 1)(X6 = 12)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 25 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 1)(X6 = 12)(X7 = 0)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 30 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 1)(X6 = 12)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 35 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 1)(X6 = 12)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 38 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 2)(X6 = 12)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 41 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 2)(X6 = 11)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 43 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 2)(X6 = 11)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 46 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 2)(X6 = 11)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 48 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 2)(X6 = 11)(X7 = 72)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 53 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 2)(X6 = 11)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 58 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 2)(X6 = 11)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 61 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 3)(X6 = 11)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 64 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 3)(X6 = 10)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 66 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 3)(X6 = 10)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 69 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 3)(X6 = 10)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 71 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 3)(X6 = 10)(X7 = 101)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 76 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 3)(X6 = 10)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 81 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 3)(X6 = 10)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 84 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 4)(X6 = 10)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 87 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 4)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 89 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 4)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 92 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 4)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 94 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 4)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 99 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 4)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 104 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 4)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 107 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 5)(X6 = 9)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 110 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 5)(X6 = 8)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 112 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 5)(X6 = 8)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 115 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 5)(X6 = 8)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 117 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 5)(X6 = 8)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 122 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 5)(X6 = 8)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 127 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 5)(X6 = 8)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 130 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 6)(X6 = 8)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 133 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 6)(X6 = 7)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 135 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 6)(X6 = 7)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 138 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 6)(X6 = 7)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 140 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 6)(X6 = 7)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 145 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 6)(X6 = 7)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 150 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 6)(X6 = 7)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 153 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 7)(X6 = 7)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 156 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 7)(X6 = 6)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 158 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 7)(X6 = 6)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 161 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 7)(X6 = 6)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 163 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 7)(X6 = 6)(X7 = 32)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 168 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 7)(X6 = 6)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 173 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 7)(X6 = 6)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 176 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 8)(X6 = 6)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 179 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 8)(X6 = 5)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 181 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 8)(X6 = 5)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 184 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 8)(X6 = 5)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 186 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 8)(X6 = 5)(X7 = 119)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 191 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 8)(X6 = 5)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 196 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 8)(X6 = 5)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 199 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 9)(X6 = 5)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 202 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 9)(X6 = 4)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 204 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 9)(X6 = 4)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 207 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 9)(X6 = 4)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 209 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 9)(X6 = 4)(X7 = 111)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 214 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 9)(X6 = 4)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 219 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 9)(X6 = 4)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 222 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 10)(X6 = 4)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 225 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 10)(X6 = 3)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 227 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 10)(X6 = 3)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 230 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 10)(X6 = 3)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 232 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 10)(X6 = 3)(X7 = 114)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 237 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 10)(X6 = 3)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 242 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 10)(X6 = 3)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 245 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 11)(X6 = 3)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 248 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 11)(X6 = 2)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 250 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 11)(X6 = 2)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 253 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 11)(X6 = 2)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 255 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 11)(X6 = 2)(X7 = 108)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 260 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 11)(X6 = 2)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 265 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 11)(X6 = 2)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 268 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 12)(X6 = 2)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 271 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 12)(X6 = 1)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 273 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 12)(X6 = 1)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 276 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 12)(X6 = 1)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 278 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 7)(X4 = 0)(X5 = 12)(X6 = 1)(X7 = 100)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] LD ['x7', 'x5']
+  DEBUG   vm:simulation    TICK 283 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 8)(X4 = 0)(X5 = 12)(X6 = 1)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] ST ['x8', 'x7']
+  DEBUG   vm:simulation    TICK 288 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 9)(X4 = 0)(X5 = 12)(X6 = 1)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] INC ['x5']
+  DEBUG   vm:simulation    TICK 291 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 10)(X4 = 0)(X5 = 13)(X6 = 1)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] DEC ['x6']
+  DEBUG   vm:simulation    TICK 294 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 11)(X4 = 0)(X5 = 13)(X6 = 0)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JUMP ['5']
+  DEBUG   vm:simulation    TICK 296 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 5)(X4 = 0)(X5 = 13)(X6 = 0)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] CMP ['x4', 'x6']
+  DEBUG   vm:simulation    TICK 299 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 6)(X4 = 0)(X5 = 13)(X6 = 0)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] JE ['12']
+  DEBUG   vm:simulation    TICK 301 REGS: [(X0 = 0)(X1 = 0)(X2 = 1023)(X3 = 12)(X4 = 0)(X5 = 13)(X6 = 0)(X7 = 33)(X8 = -33)(X9 = 0)(X10 = 0)(X11 = 0)(X12 = 0)(X13 = 0)(X14 = 0)] HLT []

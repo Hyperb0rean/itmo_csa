@@ -53,7 +53,7 @@ jobs:
           poetry install
 
       - name: Check code formatting with Ruff
-        run: echo Ok)
+        run: echo Ok
 
       - name: Run Ruff linters
         run: poetry run ruff check .

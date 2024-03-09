@@ -6,7 +6,7 @@ section .code
     mov x7, 5
     mov x8, 1
     mov x9, 0
-    mov x10, 1000
+    mov x10, 10
 .loop:
     mov x11, x8
     mod x11, x6
