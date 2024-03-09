@@ -17,10 +17,7 @@ source_code: |-
 
 stdin: |
   Hi cat
-
 stdout: |-
-  source LoC: 15 instr: 9
-  =====
   MMIO on -33 : 'Hi cat'
 
 out_code_readable: |-
