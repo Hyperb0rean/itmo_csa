@@ -7,7 +7,7 @@ import sys
 
 from isa import Instruction, Opcode
 from preprocessor import preprocessing
-from util import is_register
+from util import is_register, hex
 
 
 def transform_data_into_structure(data: str) -> (dict[int, int], dict[str, str]):
@@ -32,7 +32,10 @@ def transform_data_into_structure(data: str) -> (dict[int, int], dict[str, str])
                 address_counter += 1
         else:
             variables[name] = address_counter
-            data_mem[address_counter] = int(value)
+            if value.isdigit() or value[0] == '-' and value[1:].isdigit(): 
+                data_mem[address_counter] = int(value)
+            else:
+                data_mem[address_counter] = hex(value)
             address_counter += 1
 
     return data_mem, variables
@@ -87,7 +90,7 @@ def transform_text_into_structure(
                 assert is_register(command_arguments[0]), "mov first argument should be register"
                 if is_register(command_arguments[1]):
                     current_instruction = Instruction(cur_opcode, command_arguments)
-                elif command_arguments[1].isdigit() or (command_arguments[1][0] == '-' and command_arguments[1][1:].isdigit()):
+                elif command_arguments[1].isdigit() or (command_arguments[1][0] == '-' and command_arguments[1][1:].isdigit()) or (command_arguments[1][0] == '0' and command_arguments[1][1] == 'x' ):
                     current_instruction = Instruction(cur_opcode, command_arguments)
                 elif variables[command_arguments[1]] is not None:
                     current_instruction = Instruction(
@@ -96,7 +99,7 @@ def transform_text_into_structure(
                 else:
                     raise Exception("mov second argument can be: register, int, variable")
 
-            if cur_opcode in [Opcode.INC, Opcode.DEC, Opcode.NEGR]:
+            if cur_opcode in [Opcode.INC, Opcode.DEC, Opcode.NEG]:
                 assert len(command_arguments) == 1, "inc/dec/neg must have only one argument - register"
                 assert is_register(command_arguments[0]), "inc/dec/neg first argument should be register"
                 current_instruction = Instruction(cur_opcode, command_arguments)

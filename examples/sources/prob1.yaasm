@@ -1,0 +1,50 @@
+section .code
+.start:
+    mov x4, 0
+    mov x5, 0xFFFFFFDF
+    mov x6, 3
+    mov x7, 5
+    mov x8, 1
+    mov x9, 0
+    mov x10, 1000
+.loop:
+    mov x11, x8
+    mod x11, x6
+    cmp x11, x9
+    je .add
+.next:
+    mov x11, x8
+    mod x11, x7
+    cmp x11, x9
+    je .add
+.inc:
+    inc x8
+    cmp x8, x10
+    je .exit
+    jmp .loop
+.add:
+    add x4, x8
+    jmp .inc
+.exit:
+    mov x10, 10
+    mov x12, 48
+    dec x2
+.stack_loop:
+    mov x11, x4
+    mod x11, x10
+    div x4, x10
+    add x11, x12
+    st [x2], x11
+    cmp x4, x9
+    je .print
+    dec x2
+    jmp .stack_loop
+.print:
+    ld x4, [x2]
+    cmp x4, x9
+    je .hlt
+    st [x5], x4
+    inc x2
+    jmp .print
+.hlt:
+    hlt

@@ -1,3 +1,4 @@
+source_code: |-
 section .data
 # It is definitly "Hello, World!"
     hello_str: "Hello, world!"
@@ -19,3 +20,15 @@ section .code
     jmp .while
 .exit:
     hlt
+
+stdin: |
+
+stdout: |-
+  =========================
+  Port 1: 'Hello world!'
+
+out_code_readable: |-
+
+
+
+out_log: |-

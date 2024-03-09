@@ -1,0 +1,64 @@
+{
+    "data_mem": {},
+    "start": 0,
+    "code_mem": {
+        "0": {
+            "opcode": "mov",
+            "args": [
+                "x4",
+                "0"
+            ]
+        },
+        "1": {
+            "opcode": "mov",
+            "args": [
+                "x5",
+                "0xFFFFFFFF"
+            ]
+        },
+        "2": {
+            "opcode": "mov",
+            "args": [
+                "x6",
+                "0xFFFFFFDF"
+            ]
+        },
+        "3": {
+            "opcode": "ld",
+            "args": [
+                "x7",
+                "x5"
+            ]
+        },
+        "4": {
+            "opcode": "cmp",
+            "args": [
+                "x7",
+                "x4"
+            ]
+        },
+        "5": {
+            "opcode": "je",
+            "args": [
+                "8"
+            ]
+        },
+        "6": {
+            "opcode": "st",
+            "args": [
+                "x6",
+                "x7"
+            ]
+        },
+        "7": {
+            "opcode": "jmp",
+            "args": [
+                "3"
+            ]
+        },
+        "8": {
+            "opcode": "hlt",
+            "args": []
+        }
+    }
+}

@@ -8,7 +8,7 @@ import sys
 from ctypes import c_int32
 
 from isa import Instruction, Opcode
-from util import INT_MAX, INT_MIN, IP, SP,ZERO, Register
+from util import INT_MAX, INT_MIN, IP, SP,ZERO, Register, hex
 
 OPCODES_IMPLS = {
     Opcode.ADD: lambda a, b: a + b,
@@ -67,6 +67,13 @@ class IO:
 
     def write_byte(self, value: int):
         self.output += chr(value)
+
+
+    def __repr__(self):
+        chars = ""
+        for c in self.charset:
+            chars += f"{c}  "
+        return f"{self.charset} {self.output}"
 
 
 MEM_SIZE = 2**10
@@ -174,8 +181,8 @@ class ControlUnit:
         self.tick()
 
     def mov(self, instr: Instruction):
-        if instr.args[1].isdigit() or (instr.args[1][0] == '-' and instr.args[1][1:].isdigit()):
-            reg_from_data: int = int(instr.args[1])
+        if instr.args[1].isdigit() or (instr.args[1][0] == '-' and instr.args[1][1:].isdigit()) or (instr.args[1][0] == '0' and instr.args[1][1] == 'x' ):
+            reg_from_data: int = int(instr.args[1],0)
         else:
             reg_from: Register = Register(instr.args[1])
             reg_from_data: int = self.dataPath.calc(Opcode.ADD, self.dataPath.regs[reg_from], self.dataPath.get_zero())
@@ -248,13 +255,13 @@ class ControlUnit:
         instr_repr = str(opcode)
         instr_repr += f" {instr.args}"
         return f"{state_repr} {instr_repr}"
-
+    
 
 def simulation(start: int, code: dict[int, Instruction], data: dict[int, int], input_tokens: list[int], limit: int):
-    mmio = {-1 : IO(input_tokens), -33: IO([])}
+    mmio = {hex('0xFFFFFFFF'): IO(input_tokens), hex('0xFFFFFFDF'): IO([])}
     dp = DataPath(start, code, data, mmio)
     cu = ControlUnit(dp)
-
+    logging.debug("%s", mmio)
     logging.debug("%s", cu)
     instr_counter = 0
     try:

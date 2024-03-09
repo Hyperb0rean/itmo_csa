@@ -10,7 +10,7 @@ class Opcode(str, Enum):
     ST = "st"
     INC = "inc"
     DEC = "dec"
-    NEGR = "neg"
+    NEG = "neg"
     ADD = "add"
     DIV = "div"
     MOD = "mod"
@@ -18,8 +18,6 @@ class Opcode(str, Enum):
     JUMP = "jmp"
     JG = "jg"
     JE = "je"
-    # IN = "in"
-    # OUT = "out"
     NOP = "nop"
 
     def __str__(self):

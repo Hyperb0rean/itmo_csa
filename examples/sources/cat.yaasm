@@ -1,0 +1,15 @@
+section .code
+.start:
+    mov x4, 0
+# In
+    mov x5, 0xFFFFFFFF
+# Out
+    mov x6, 0xFFFFFFDF
+.read:
+    ld x7, [x5]
+    cmp x7, x4
+    je .exit
+    st [x6], x7
+    jmp .read
+.exit:
+    hlt

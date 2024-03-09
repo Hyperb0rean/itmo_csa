@@ -1,0 +1,270 @@
+{
+    "data_mem": {},
+    "start": 0,
+    "code_mem": {
+        "0": {
+            "opcode": "mov",
+            "args": [
+                "x4",
+                "0"
+            ]
+        },
+        "1": {
+            "opcode": "mov",
+            "args": [
+                "x5",
+                "0xFFFFFFDF"
+            ]
+        },
+        "2": {
+            "opcode": "mov",
+            "args": [
+                "x6",
+                "3"
+            ]
+        },
+        "3": {
+            "opcode": "mov",
+            "args": [
+                "x7",
+                "5"
+            ]
+        },
+        "4": {
+            "opcode": "mov",
+            "args": [
+                "x8",
+                "1"
+            ]
+        },
+        "5": {
+            "opcode": "mov",
+            "args": [
+                "x9",
+                "0"
+            ]
+        },
+        "6": {
+            "opcode": "mov",
+            "args": [
+                "x10",
+                "1000"
+            ]
+        },
+        "7": {
+            "opcode": "mov",
+            "args": [
+                "x11",
+                "x8"
+            ]
+        },
+        "8": {
+            "opcode": "mod",
+            "args": [
+                "x11",
+                "x6"
+            ]
+        },
+        "9": {
+            "opcode": "cmp",
+            "args": [
+                "x11",
+                "x9"
+            ]
+        },
+        "10": {
+            "opcode": "je",
+            "args": [
+                "19"
+            ]
+        },
+        "11": {
+            "opcode": "mov",
+            "args": [
+                "x11",
+                "x8"
+            ]
+        },
+        "12": {
+            "opcode": "mod",
+            "args": [
+                "x11",
+                "x7"
+            ]
+        },
+        "13": {
+            "opcode": "cmp",
+            "args": [
+                "x11",
+                "x9"
+            ]
+        },
+        "14": {
+            "opcode": "je",
+            "args": [
+                "19"
+            ]
+        },
+        "15": {
+            "opcode": "inc",
+            "args": [
+                "x8"
+            ]
+        },
+        "16": {
+            "opcode": "cmp",
+            "args": [
+                "x8",
+                "x10"
+            ]
+        },
+        "17": {
+            "opcode": "je",
+            "args": [
+                "21"
+            ]
+        },
+        "18": {
+            "opcode": "jmp",
+            "args": [
+                "7"
+            ]
+        },
+        "19": {
+            "opcode": "add",
+            "args": [
+                "x4",
+                "x8"
+            ]
+        },
+        "20": {
+            "opcode": "jmp",
+            "args": [
+                "15"
+            ]
+        },
+        "21": {
+            "opcode": "mov",
+            "args": [
+                "x10",
+                "10"
+            ]
+        },
+        "22": {
+            "opcode": "mov",
+            "args": [
+                "x12",
+                "48"
+            ]
+        },
+        "23": {
+            "opcode": "dec",
+            "args": [
+                "x2"
+            ]
+        },
+        "24": {
+            "opcode": "mov",
+            "args": [
+                "x11",
+                "x4"
+            ]
+        },
+        "25": {
+            "opcode": "mod",
+            "args": [
+                "x11",
+                "x10"
+            ]
+        },
+        "26": {
+            "opcode": "div",
+            "args": [
+                "x4",
+                "x10"
+            ]
+        },
+        "27": {
+            "opcode": "add",
+            "args": [
+                "x11",
+                "x12"
+            ]
+        },
+        "28": {
+            "opcode": "st",
+            "args": [
+                "x2",
+                "x11"
+            ]
+        },
+        "29": {
+            "opcode": "cmp",
+            "args": [
+                "x4",
+                "x9"
+            ]
+        },
+        "30": {
+            "opcode": "je",
+            "args": [
+                "33"
+            ]
+        },
+        "31": {
+            "opcode": "dec",
+            "args": [
+                "x2"
+            ]
+        },
+        "32": {
+            "opcode": "jmp",
+            "args": [
+                "24"
+            ]
+        },
+        "33": {
+            "opcode": "ld",
+            "args": [
+                "x4",
+                "x2"
+            ]
+        },
+        "34": {
+            "opcode": "cmp",
+            "args": [
+                "x4",
+                "x9"
+            ]
+        },
+        "35": {
+            "opcode": "je",
+            "args": [
+                "39"
+            ]
+        },
+        "36": {
+            "opcode": "st",
+            "args": [
+                "x5",
+                "x4"
+            ]
+        },
+        "37": {
+            "opcode": "inc",
+            "args": [
+                "x2"
+            ]
+        },
+        "38": {
+            "opcode": "jmp",
+            "args": [
+                "33"
+            ]
+        },
+        "39": {
+            "opcode": "hlt",
+            "args": []
+        }
+    }
+}
