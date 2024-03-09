@@ -18,6 +18,7 @@ source_code: |-
 stdin: |
   Hi cat
 stdout: |-
+  =====
   MMIO on -33 : 'Hi cat'
 
 out_code_readable: |-
